@@ -10,7 +10,7 @@ import { AppComponent } from './app.component';
 import { ComponentsModule } from './components/components.module';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
-import { IonicStorageModule } from '@ionic/storage';
+import { IonicStorageModule } from '@ionic/storage';3
 
 
 @NgModule({

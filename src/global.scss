@@ -17,3 +17,15 @@
 .text-primary{
     color: var( --ion-color-primary ) !important;
 }
+.action-sheet-group{
+    background: rgb(31, 31, 31) !important;
+}
+
+.action-sheet-button{
+    --color: white !important;
+    background: rgb(31, 31, 31) !important;
+}
+
+.ios .action-sheet-icon{
+    display: none !important;
+}

@@ -10,17 +10,36 @@ import { Article } from 'src/app/interfaces/interfaces';
 export class Tab2Page implements OnInit{
   categorias = ['entertainment', 'general', 'health', 'science', 'sports', 'technology'];
   noticias: Article[] = [];
-
-  constructor(private noticiasService: NoticiasService) {
+  noticia: string = '';
+  constructor(private ns: NoticiasService) {
 
   }
 
-  segmentChanged(e) {
-    this.noticiasService.getTopHeadLinesCategoria(e.detail.value).subscribe(resp => {
-      this.noticias = [];
-      this.noticias.push(... resp.articles);
-    });
+  segmentChanged(d) {
+    this.noticia = d.detail.value;
+    this.noticias = [];
+    this.cargarNoticias();
   }
 
   ngOnInit(){}
+
+  loadData(e){
+    this.cargarNoticias(e);
+  }
+
+  cargarNoticias(e?){
+    this.ns.getTopHeadLinesCategoria(this.noticia).subscribe(resp => {
+      this.noticias.push(... resp.articles);
+      
+      if(resp.articles.length === 0){
+        e.target.disabled = true;
+        e.target.complete();
+        return;
+      }
+
+      if(e){
+        e.target.complete();
+      }
+    });
+  }
 }

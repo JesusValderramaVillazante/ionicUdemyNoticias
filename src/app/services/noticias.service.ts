@@ -13,14 +13,26 @@ const headers = new HttpHeaders({
   providedIn: 'root'
 })
 export class NoticiasService {
+  headLinesPage: number = 0;
+  categoriaActual = '';
+  categoriaPage = 0;
+
   constructor(private http: HttpClient) { }
 
   getTopHeadLines() {
-    return this.ejecutarQuery<RespuestaTopHeadLines>('/top-headlines?country=us');
+    this.headLinesPage++;
+    return this.ejecutarQuery<RespuestaTopHeadLines>(`/top-headlines?country=us&pageSize=20&page=${this.headLinesPage}`);
   }
 
   getTopHeadLinesCategoria( categoria: string) {
-    return this.ejecutarQuery<RespuestaTopHeadLines>(`/top-headlines?country=de&category=${categoria}`);
+    if(this.categoriaActual === categoria){
+      this.categoriaPage++;
+    }else{
+      this.categoriaPage = 1;
+      this.categoriaActual = categoria;
+    }
+
+    return this.ejecutarQuery<RespuestaTopHeadLines>(`/top-headlines?country=de&category=${categoria}&pageSize=20&page=${this.categoriaPage}`);
   }
 
   private ejecutarQuery<T>( query: string){

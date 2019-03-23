@@ -7,5 +7,11 @@
 </ion-header>
 
 <ion-content color="dark">
-    <app-noticias [noticias]="dataLocalService.noticias"></app-noticias>
+    <app-noticias *ngIf="dataLocalService.noticias.length > 0; else sin" [noticias]="dataLocalService.noticias" [enFavoritos]="true">
+    </app-noticias>
+    <ng-template #sin>
+      <div style="height: 100%; display: flex;" class="ion-align-items-center ion-justify-content-center">
+        <p>No hay registro :(</p>
+      </div>
+    </ng-template>
 </ion-content>

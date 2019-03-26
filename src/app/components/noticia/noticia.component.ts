@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-import { ActionSheetController } from '@ionic/angular';
+import { ActionSheetController, Platform } from '@ionic/angular';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { DataLocalService } from 'src/app/services/data-local.service';
 import { ToastController } from '@ionic/angular';
@@ -22,7 +22,8 @@ export class NoticiaComponent implements OnInit {
     public actionSheetController: ActionSheetController,
     private socialSharing: SocialSharing,
     private datalocalService: DataLocalService,
-    public toastController: ToastController
+    public toastController: ToastController,
+    public platform: Platform
   ) { };
 
   ngOnInit() { }
@@ -68,15 +69,7 @@ export class NoticiaComponent implements OnInit {
           text: 'Compartir',
           icon: 'share',
           handler: () => {
-            this.socialSharing.share(
-              this.noticia.title,
-              this.noticia.source.name,
-              null,
-              this.noticia.url).then(() => {
-                console.log("ok");
-              }).catch(() => {
-                console.log("not");
-              });
+            this.compartirNoticia();
           }
         },
         guardarBorrarBtn,
@@ -93,4 +86,27 @@ export class NoticiaComponent implements OnInit {
     await actionSheet.present();
   }
 
+  compartirNoticia(){
+    if(this.platform.is('cordova')){
+      this.socialSharing.share(
+        this.noticia.title,
+        this.noticia.source.name,
+        null,
+        this.noticia.url
+      );
+    }else{
+      if (navigator['share']) {
+        navigator['share']({
+            title: this.noticia.title,
+            text: this.noticia.source.description,
+            url: this.noticia.url,
+        })
+          .then(() => console.log('Successful share'))
+          .catch((error) => console.log('Error sharing', error));
+      }else{
+        console.info("No compartir")
+      }
+      
+    }
+  }
 }
